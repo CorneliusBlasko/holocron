@@ -1,12 +1,8 @@
 # Holocron
 
------
-
 - Author: Alberto Mut
 - Version 1.0. 
 - Date: 23/07/2020
-
------------
 
 ## Project diagram
 
