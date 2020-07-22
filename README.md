@@ -22,9 +22,9 @@ The above diagram is a screenshot of the `Holocron.drawio` file attached to this
 - This project was created using TDD, so the tests cover all the functionality. That's why the main classes reuse much of the test code.
 - The tests are not unit tests, they use external sources (namely, the SWAPI endpoints). This decision was made because there isn't any business logic in the project, just some data manipulation to filter the responses and return just the desired information. Therefore, mocking the data would be pointless as we're not doing anything with it. The tests check the availability of the data source and the aforementioned manipulation. The moment business logic is added to the requirements, proper unit tests can be added.
 - The JSON objects returning the characters and the ships can easily be upgraded with more information.
-- There are two main classes for each entity, a Holocron model class with the `Hol` prefix and a SWAPI model class with the `SW` prefix. This is so we can map the entire source entity to an object model and choose which information we wish to return to the client (in this case, name and manufacturer for ships, and name and species for characters).
+- There are two main classes for each entity, a Holocron domain class with the `Hol` prefix and a SWAPI domain class with the `SW` prefix. This is so we can map the entire source entity to an object model and choose which information we wish to return to the client (in this case, name and manufacturer for ships, and name and species for characters).
 - Due to the pagination of the SWAPI responses and the successive calls to retrieve all the characters' species the service is unbearably slow, taking between 15 to 20 seconds to retrieve the characters list. This can be solved by adding a MongoDB database and a scheduled job to check the data source and look for changes in the data.
-- In the service method `peopleToCharacters()` we use the first element of the `species` list instead of iterating through it and make a call for each species because every character belongs to only one species, thus we asume the list will always have one element. Why the species is a list instead of a string is unknown.
+- In the service method `peopleToCharacters()` we use the first element of the `species` list instead of iterating through it and make a call for each species because every character belongs to only one species, thus we asume the list will always have one element. Why the species is a list instead of a string is unknown. Also, the service returns `"Unknown specie"` when the species list is empty.
 
 ## Project information
 
@@ -57,13 +57,13 @@ We'll need Apache Maven as well to generate the `.war` artifact to be deployed a
 
 - We must first get a remote server with Java and Tomcat installed. 
 - Generate `holocron.war` either via command line or with an IDE. If a command line is used this will come in handy: https://www.javatpoint.com/war-file
-- Upload the `holocron.war` to the server via FTP, SSH or Tomcat webap via the `[tomcat url]:[tomcat port]/manager/html` url. 
+- Upload the `holocron.war` to the server via FTP, SSH or Tomcat webapp via the `[tomcat url]:[tomcat port]/manager/html` url. 
 - Run the `.war`.
 
 ### Accessing the service
 
-- The service can be accessed locally using the url `http://localhost:8081/holocron/` followed by either `ships` or `characters` depending on the result we'd like to retrieve.
-- The service can be accessed remotely by changing the url and the port for the ones where the artifact has been deployed. However, the endpoints will remain the same.
+- The service can be accessed locally using the url `http://localhost:8081/holocron/` followed by either `ships` or `characters` depending on the result we'd like to retrieve. Example: `http://localhost:8081/holocron/ships`.
+- The service can be accessed remotely by changing the url and the port for the ones where the artifact has been deployed. However, the endpoints will remain the same. Example: `http://somedomain:8383/holocron/ships`.
 
 ## Screenshots
 
