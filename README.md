@@ -21,6 +21,7 @@
 - The tests are not unit tests, they use external sources (namely, the SWAPI endpoints). This decision was made because there isn't any business logic in the project, just some data manipulation to put all the entities in the same list. Therefore, mocking the data would be pointless as we're not doing anything with it. The tests check the availability of the data source and the aforementioned manipulation. The moment business logic is added to the requirements, unit tests will be added.
 - The JSON listing the characters and the ships can easily be upgraded with more information (date, version, etc).
 - Due to the pagination of the SWAPI response we've had to make several calls to retrieve all the characters and the ships, and that makes the service unbearably slow. This can be solved by adding a cache layer or even a MongoDB database with a scheduled job to check the data source and look for changes in the response.
+- The project repository uses Gitflow.
 
 ## How to run this software
 
@@ -65,3 +66,4 @@ When tested via Postman, the result should look like this:
 - And when the tests are run in an IDE the result should be this:
 
 ![postman1](./img/ide.png)
+
