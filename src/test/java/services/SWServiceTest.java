@@ -32,8 +32,6 @@ public class SWServiceTest{
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(SWServiceTest.class);
     private static final String UNKNOWN_SPECIES = "Unknown species";
 
-
-    //If these tests ever fails it's either because the endpoint is dead or the per page and/or the total amount of ships have changed
     @Test
     public void testAPIConnection(){
 
@@ -55,7 +53,6 @@ public class SWServiceTest{
 
         assertFalse(starships.isEmpty());
         assertThat(starships,Matchers.<SWShip>hasSize(10));
-
     }
 
     @Test
@@ -69,7 +66,7 @@ public class SWServiceTest{
         do{
             try{
                 if(null == next){
-                    if(null == previous){ //First call
+                    if(null == previous){
                         response = utils.makeAPICall(uri,shipsEndpoint);
                     }
                 }
@@ -105,7 +102,7 @@ public class SWServiceTest{
         do{
             try{
                 if(null == next){
-                    if(null == previous){ //First call
+                    if(null == previous){
                         response = utils.makeAPICall(uri,peopleEndpoint);
                     }
                 }
@@ -151,7 +148,6 @@ public class SWServiceTest{
         }
 
         return characters;
-
     }
 
     public String getCharacterSpecie(String url){
@@ -169,6 +165,5 @@ public class SWServiceTest{
         }
 
         return species;
-
     }
 }

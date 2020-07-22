@@ -42,7 +42,7 @@ public class SWServiceImpl implements SWService{
                         response = utils.makeAPICall(uri,shipsEndpoint);
                     }
                 }
-                else{ //Succesive calls
+                else{ //Following calls
                     response = utils.makeAPICall(next,"");
                 }
             }
@@ -188,7 +188,7 @@ public class SWServiceImpl implements SWService{
             species = gson.fromJson(speciesName,String.class);
         }
         catch(Exception e){
-            logger.error("Error trying to retrieve characters species. Error: " + e);
+            logger.error("Error trying to retrieve character's species. Error: " + e);
         }
 
         return species;
