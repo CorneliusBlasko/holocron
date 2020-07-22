@@ -13,15 +13,13 @@ public class SWControllerImpl implements SWController{
     @Override
     public String getResult(String entity){
 
-        String result = "";
-
         if(entity.equals("ships")){
-            result = service.getStarships();
+            return service.getShips();
 
         }else if(entity.equals("characters")){
-            result = service.getCharacters();
+            return service.getCharacters();
         }
 
-        return result;
+        return null;
     }
 }

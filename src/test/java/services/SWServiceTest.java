@@ -3,7 +3,9 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import model.SWStarship;
+import model.holocron.HolCharacter;
+import model.swapi.SWCharacter;
+import model.swapi.SWShip;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,7 +28,9 @@ public class SWServiceTest{
     private final Properties properties = utils.getProperties();
     private String uri = properties.getProperty("swapi.uri");
     private String shipsEndpoint = properties.getProperty("swapi.starships.endpoint");
+    private String peopleEndpoint = properties.getProperty("swapi.people.endpoint");
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(SWServiceTest.class);
+    private static final String UNKNOWN_SPECIES = "Unknown species";
 
 
     //If these tests ever fails it's either because the endpoint is dead or the per page and/or the total amount of ships have changed
@@ -35,7 +39,7 @@ public class SWServiceTest{
 
 
         String response = "";
-        List<SWStarship> starships;
+        List<SWShip> starships;
 
         try{
             response = utils.makeAPICall(uri,shipsEndpoint);
@@ -47,10 +51,10 @@ public class SWServiceTest{
         JsonObject element = new Gson().fromJson(response,JsonObject.class);
         JsonElement results = element.get("results");
         Gson gson = new Gson();
-        starships = Arrays.asList(gson.fromJson(results,SWStarship[].class));
+        starships = Arrays.asList(gson.fromJson(results,SWShip[].class));
 
         assertFalse(starships.isEmpty());
-        assertThat(starships,Matchers.<SWStarship>hasSize(10));
+        assertThat(starships,Matchers.<SWShip>hasSize(10));
 
     }
 
@@ -59,7 +63,7 @@ public class SWServiceTest{
 
         String response = "";
         String previous = null;
-        List<SWStarship> starships = new ArrayList<>();
+        List<SWShip> starships = new ArrayList<>();
         String next = null;
 
         do{
@@ -83,12 +87,88 @@ public class SWServiceTest{
             Gson gson = new Gson();
             previous = gson.fromJson(previousElement,String.class);
             next = gson.fromJson(nextElement,String.class);
-            starships.addAll(Arrays.asList(gson.fromJson(starshipsElement,SWStarship[].class)));
+            starships.addAll(Arrays.asList(gson.fromJson(starshipsElement,SWShip[].class)));
         }
         while(next != null);
 
         assertEquals(36, starships.size());
+    }
 
+    @Test
+    public void testCharacterSpecies(){
+        String response = "";
+        String previous = null;
+        List<SWCharacter> people = new ArrayList<>();
+        List<HolCharacter> characters;
+        String next = null;
+
+        do{
+            try{
+                if(null == next){
+                    if(null == previous){ //First call
+                        response = utils.makeAPICall(uri,peopleEndpoint);
+                    }
+                }
+                else{
+                    response = utils.makeAPICall(next,"");
+                }
+            }
+            catch(Exception e){
+                logger.error("Error trying to retrieve characters. Error: " + e);
+            }
+            JsonObject element = new Gson().fromJson(response,JsonObject.class);
+            JsonElement nextElement = element.get("next");
+            JsonElement previousElement = element.get("previous");
+            JsonElement charactersElement = element.get("results");
+            Gson gson = new Gson();
+            previous = gson.fromJson(previousElement,String.class);
+            next = gson.fromJson(nextElement,String.class);
+            people.addAll(Arrays.asList(gson.fromJson(charactersElement,SWCharacter[].class)));
+        }
+        while(next != null);
+
+        characters = peopleToCharacters(people);
+        assertEquals("Droid", characters.get(1).getSpecie());
+    }
+
+    public List<HolCharacter> peopleToCharacters(List<SWCharacter> people){
+
+        List<HolCharacter> characters = new ArrayList<>();
+
+        for(SWCharacter person : people){
+
+            HolCharacter character = new HolCharacter();
+            character.setName(person.getName());
+
+            if(!person.getSpecies().isEmpty()){
+                character.setSpecie(getCharacterSpecie(person.getSpecies().get(0)));
+            }else{
+                character.setSpecie(UNKNOWN_SPECIES);
+
+            }
+
+            characters.add(character);
+        }
+
+        return characters;
+
+    }
+
+    public String getCharacterSpecie(String url){
+
+        String species = "";
+        try{
+            String response = utils.makeAPICall(url, "");
+            JsonObject element = new Gson().fromJson(response,JsonObject.class);
+            JsonElement speciesName = element.get("name");
+            Gson gson = new Gson();
+            species = gson.fromJson(speciesName,String.class);
+        }
+        catch(Exception e){
+            logger.error("Error trying to retrieve characters species. Error: " + e);
+        }
+
+        return species;
 
     }
 }
