@@ -16,8 +16,10 @@ import java.util.Properties;
 public class SWServiceImpl implements SWService{
 
     private Utils utils = new Utils();
-    Properties properties = utils.getProperties();
-    String uri = properties.getProperty("swapi.uri");
+    private final Properties properties = utils.getProperties();
+    private String uri = properties.getProperty("swapi.uri");
+    private String shipsEndpoint = properties.getProperty("swapi.starships.endpoint");
+    private String peopleEndpoint = properties.getProperty("swapi.people.endpoint");
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(SWServiceImpl.class);
 
 
@@ -33,7 +35,7 @@ public class SWServiceImpl implements SWService{
             try{
                 if(null == next){
                     if(null == previous){ //First call
-                        response = utils.makeAPICall(uri,"starships");
+                        response = utils.makeAPICall(uri,shipsEndpoint);
                     }
                 }
                 else{
@@ -68,7 +70,7 @@ public class SWServiceImpl implements SWService{
             try{
                 if(null == next){
                     if(null == previous){ //First call
-                        response = utils.makeAPICall(uri,"people");
+                        response = utils.makeAPICall(uri,peopleEndpoint);
                     }
                 }
                 else{
@@ -111,7 +113,7 @@ public class SWServiceImpl implements SWService{
 
     public String charactersToString(List<SWCharacter> characters){
         StringBuilder builder = new StringBuilder();
-        builder.append("{\"ships\":[");
+        builder.append("{\"characters\":[");
 
         for(SWCharacter character : characters){
             Gson gson = new Gson();

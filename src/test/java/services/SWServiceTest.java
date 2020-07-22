@@ -4,23 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import model.SWStarship;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.LoggerFactory;
 import utils.Utils;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,26 +22,23 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SWServiceTest{
 
-    private String uri;
+    private Utils utils = new Utils();
+    private final Properties properties = utils.getProperties();
+    private String uri = properties.getProperty("swapi.uri");
+    private String shipsEndpoint = properties.getProperty("swapi.starships.endpoint");
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(SWServiceTest.class);
 
-    private Utils utils = new Utils();
 
-    @BeforeAll
-    public void setProperties(){
-
-        Properties properties = utils.getProperties();
-        uri = properties.getProperty("swapi.uri");
-    }
-
+    //If these tests ever fails it's either because the endpoint is dead or the per page and/or the total amount of ships have changed
     @Test
-    public void testAPI(){
+    public void testAPIConnection(){
+
 
         String response = "";
         List<SWStarship> starships;
 
         try{
-            response = makeAPICall(uri,"starships");
+            response = utils.makeAPICall(uri,shipsEndpoint);
         }
         catch(Exception e){
             logger.error("Error trying to test ships retrieval. Error: " + e);
@@ -69,7 +55,7 @@ public class SWServiceTest{
     }
 
     @Test
-    public void testNext(){
+    public void testPaginationRetrieval(){
 
         String response = "";
         String previous = null;
@@ -80,11 +66,11 @@ public class SWServiceTest{
             try{
                 if(null == next){
                     if(null == previous){ //First call
-                        response = makeAPICall(uri,"starships");
+                        response = utils.makeAPICall(uri,shipsEndpoint);
                     }
                 }
                 else{
-                    response = makeAPICall(next,"");
+                    response = utils.makeAPICall(next,"");
                 }
             }
             catch(Exception e){
@@ -104,35 +90,5 @@ public class SWServiceTest{
         assertEquals(36, starships.size());
 
 
-    }
-
-    private String makeAPICall(String uri,String parameter) throws URISyntaxException, IOException{
-        String response_content;
-        URIBuilder query;
-
-        if(parameter.isEmpty()){
-            query = new URIBuilder(uri);
-        }
-        else{
-            query = new URIBuilder(uri + "/" + parameter);
-        }
-
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpGet request = new HttpGet(query.build());
-
-        request.setHeader(HttpHeaders.ACCEPT,"application/json");
-
-        CloseableHttpResponse response = client.execute(request);
-
-        try{
-            HttpEntity entity = response.getEntity();
-            response_content = EntityUtils.toString(entity);
-            EntityUtils.consume(entity);
-        }
-        finally{
-            response.close();
-        }
-
-        return response_content;
     }
 }

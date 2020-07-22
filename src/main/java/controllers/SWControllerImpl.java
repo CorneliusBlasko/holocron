@@ -1,10 +1,6 @@
 package controllers;
 
-import com.google.gson.Gson;
-import model.SWStarship;
 import services.SWService;
-
-import java.util.List;
 
 public class SWControllerImpl implements SWController{
 
