@@ -22,6 +22,8 @@
 - The JSON listing the characters and the ships can easily be upgraded with more information (date, version, etc).
 - Due to the pagination of the SWAPI response we've had to make several calls to retrieve all the characters and the ships, and that makes the service unbearably slow. This can be solved by adding a cache layer or even a MongoDB database with a scheduled job to check the data source and look for changes in the response.
 - The project repository uses Gitflow.
+- The IDE we used to write the code is IntelliJ IDEA Ultimate edition.
+- The service has been tested using Postman.
 
 ## How to run this software
 
@@ -66,4 +68,3 @@ When tested via Postman, the result should look like this:
 - And when the tests are run in an IDE the result should be this:
 
 ![postman1](./img/ide.png)
-
