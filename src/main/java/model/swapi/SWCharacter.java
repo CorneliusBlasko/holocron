@@ -1,4 +1,4 @@
-package model;
+package model.swapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

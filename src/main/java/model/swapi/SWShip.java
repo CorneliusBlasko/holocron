@@ -1,4 +1,4 @@
-package model;
+package model.swapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SWStarship{
+public class SWShip{
 
     private String name;
     private String model;

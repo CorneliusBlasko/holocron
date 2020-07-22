@@ -34,7 +34,6 @@ public class HolocronServlet extends HttpServlet{
             response = error;
         }
 
-
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -43,18 +42,6 @@ public class HolocronServlet extends HttpServlet{
 
         out.print(response);
         out.flush();
-    }
-
-    public String getResult(String object){
-        if(object.equals("ships")){
-
-        } else if(object.equals("characters")){
-
-        }
-        String ships =  "";
-
-        return ships;
-
     }
 
 }
