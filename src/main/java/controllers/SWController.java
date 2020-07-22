@@ -2,5 +2,5 @@ package controllers;
 
 public interface SWController{
 
-    String getResult();
+    String getResult(String entity);
 }
