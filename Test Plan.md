@@ -12,11 +12,11 @@ Holocron is a service acting as a wrapper for the SWAPI api (that can be found i
 
 ### In scope
 
-The scope of this plan will include the assertion that the service works as intended and the information retrieved from the endpoint is accurate and its format is correct.
+The scope of this plan will include checking that the service works as intended and the information retrieved from the endpoint is accurate and its format is correct.
 
 ### Out of scope
 
-The quality of the code will not be tested or reviewed as it is not part of the test. The tools or frameworks (or lack of them) used in this service will not be tested either.
+The quality of the code will not be tested or reviewed as it is not part of the test. The use of tools or frameworks in this application will not be tested either.
 
 ## Quality objective
 
