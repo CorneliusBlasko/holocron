@@ -52,7 +52,7 @@ public class SWServiceTest{
         starships = Arrays.asList(gson.fromJson(results,SWShip[].class));
 
         assertFalse(starships.isEmpty());
-        assertThat(starships,Matchers.<SWShip>hasSize(10));
+        assertEquals(10, starships.size());
     }
 
     @Test

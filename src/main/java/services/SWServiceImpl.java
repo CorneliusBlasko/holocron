@@ -57,8 +57,7 @@ public class SWServiceImpl implements SWService{
             previous = gson.fromJson(previousElement,String.class);
             next = gson.fromJson(nextElement,String.class);
             starships.addAll(Arrays.asList(gson.fromJson(starshipsElement,SWShip[].class)));
-        }
-        while(next != null);
+        }while(next != null);
 
         ships = starshipsToShips(starships);
 
@@ -95,8 +94,7 @@ public class SWServiceImpl implements SWService{
             previous = gson.fromJson(previousElement,String.class);
             next = gson.fromJson(nextElement,String.class);
             people.addAll(Arrays.asList(gson.fromJson(charactersElement,SWCharacter[].class)));
-        }
-        while(next != null);
+        } while(next != null);
 
         characters = peopleToCharacters(people);
 
@@ -114,8 +112,6 @@ public class SWServiceImpl implements SWService{
         }
 
         return ships;
-
-
     }
 
     public String shipsToJSON(List<HolShip> ships){
@@ -132,6 +128,7 @@ public class SWServiceImpl implements SWService{
                 builder.append("]}");
             }
         }
+
         return builder.toString();
     }
 
@@ -157,7 +154,6 @@ public class SWServiceImpl implements SWService{
         }
 
         return characters;
-
     }
 
     public String charactersToJSON(List<HolCharacter> characters){
@@ -192,6 +188,5 @@ public class SWServiceImpl implements SWService{
         }
 
         return species;
-
     }
 }
