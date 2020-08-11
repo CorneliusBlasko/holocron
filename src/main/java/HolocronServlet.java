@@ -29,7 +29,7 @@ public class HolocronServlet extends HttpServlet{
         try{
             response = controller.getResult(entity);
         }catch(Exception e){
-            error = "Error retrieving params from cryptoprices request. Error: " + e;
+            error = "Error retrieving params from SWAPI request. Error: " + e;
             logger.error(error);
             response = error;
         }
